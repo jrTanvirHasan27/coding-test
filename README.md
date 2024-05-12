@@ -1,3 +1,5 @@
+<p> For running the project, at first the project needs to be installed and then one should have to migrate the database with appropriate credintials and database. Then it is fine to go for the usage. </p>
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
