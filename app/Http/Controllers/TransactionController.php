@@ -11,7 +11,11 @@ class TransactionController extends Controller
 {
     public function showDepositedTransactions()
     {
-        $depositedTransactions = Transaction::where('transaction_type', 'deposit')->get();
+        $user = auth()->user();
+
+        $depositedTransactions = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'deposit')
+            ->get();
 
         return view('deposited_transactions', ['transactions' => $depositedTransactions]);
     }
@@ -40,10 +44,15 @@ class TransactionController extends Controller
 
     public function showWithdrawalTransactions()
     {
-        $withdrawalTransactions = Transaction::where('transaction_type', 'withdrawal')->get();
+        $user = auth()->user();
+
+        $withdrawalTransactions = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'withdrawal')
+            ->get();
 
         return view('withdrawal_transactions', ['transactions' => $withdrawalTransactions]);
     }
+
 
     public function makeWithdrawal(Request $request)
     {
@@ -62,7 +71,7 @@ class TransactionController extends Controller
         // Apply free withdrawal conditions for Individual accounts
         if ($user->account_type == 'individual') {
             if (Carbon::now()->isFriday() || $request->amount <= 1000 || $this->isFirstWithdrawalOfMonth($user, $request->amount)) {
-                $withdrawalFee = 0; 
+                $withdrawalFee = 0;
             }
         }
 
@@ -74,9 +83,9 @@ class TransactionController extends Controller
             'date' => now(),
         ]);
 
-         $user = User::find(auth()->id());
-         $user->balance -= $newTransaction->amount;
-         $user->save();
+        $user = User::find(auth()->id());
+        $user->balance -= $newTransaction->amount;
+        $user->save();
 
         return redirect()->route('withdrawal.transactions')->with('success', 'Withdrawal successful.');
     }
